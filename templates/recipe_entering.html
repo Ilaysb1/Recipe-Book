@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Enter Recipe</title>
+</head>
+<body>
+    <h2>Enter Recipe Details</h2>
+    <form method="POST">
+        <label for="recipe_name">Recipe Name:</label><br>
+        <input type="text" id="recipe_name" name="recipe_name"><br><br>
+        <label for="recipe_time">Recipe Time (minutes):</label><br>
+        <input type="number" id="recipe_time" name="recipe_time" min="1" required><br><br>
+        <label for="recipe_description">Recipe Description:</label><br>
+        <textarea id="recipe_description" name="recipe_description" rows="4" cols="50"></textarea><br><br>
+        <label for="difficulty">Difficulty:</label>
+        <select id="difficulty" name="difficulty">
+            <option value="beginner">Beginner</option>
+            <option value="intermediate">Intermediate</option>
+            <option value="advanced">Advanced</option>
+        </select><br><br>
+        <label for="ingredients">Ingredients:</label><br>
+        <textarea id="ingredients" name="ingredients" rows="4" cols="50"></textarea><br><br>
+        <input type="submit" value="Submit">
+    </form>
+    <br>
+    <a href="/">Go back to input page</a>
+</body>
+</html>

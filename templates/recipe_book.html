@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Recipe Book</title>
+</head>
+<body>
+    <h2>Recipe Book</h2>
+    <form action="/recipe_book" method="GET">
+        <label for="sort_by">Sort by:</label>
+        <select id="sort_by" name="sort_by">
+            <option value="none">None</option>
+            <option value="time">Time</option>
+            <option value="difficulty">Difficulty</option>
+        </select>
+        <label for="sort_order">Sort order:</label>
+        <select id="sort_order" name="sort_order">
+            <option value="asc">Ascending</option>
+            <option value="desc">Descending</option>
+        </select>
+        <input type="submit" value="Sort">
+    </form>
+    <ul>
+        {% for recipe in recipes %}
+            <li>
+                <a href="{{ url_for('result', recipe_name=recipe.recipe_name) }}">{{ recipe.recipe_name }}</a>
+                {% if sort_by == 'time' %}
+                    - Time: {{ recipe.recipe_time }} min
+                {% elif sort_by == 'difficulty' %}
+                    - Difficulty: {{ recipe.difficulty }}
+                {% endif %}
+            </li>
+        {% endfor %}
+    </ul>
+    <br>
+    <a href="/">Go back to input page</a>
+</body>
+</html>
