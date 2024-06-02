@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    io.kompose.service: flask-app
+  name: flask-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: flask-app
+  template:
+    metadata:
+      labels:
+        app: flask-app
+        io.kompose.network/final-project-1-default: "true"
+        io.kompose.service: flask-app
+    spec:
+      containers:
+        - env:
+            - name: MONGO_URI
+              value: "mongodb+srv://ilaysb:Ilaysb12@cluster0.f1l3dro.mongodb.net/testDB"
+          image: ilaysb/final-project-1-flask_app:latest
+          name: flask-app
+          ports:
+            - containerPort: 5000
+      restartPolicy: Always
