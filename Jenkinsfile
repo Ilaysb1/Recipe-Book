@@ -1,5 +1,9 @@
 pipeline {
-    agent any
+    agent {
+        kubernetes {
+            label 'jenkins/jenkins-jenkins-agent'
+        }
+    }
 
     stages {
         stage('Build Docker Image') {
@@ -9,7 +13,7 @@ pipeline {
                     sh 'docker build -t ilaysb/final-project-1-flask_app:latest:${BRANCH_NAME} .'
                 }
             }
-        }
+    }
         
         stage('Run Unit Test') {
             steps {
