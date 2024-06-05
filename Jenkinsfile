@@ -2,9 +2,10 @@ pipeline {
     agent {
         kubernetes {
             label 'jenkins/jenkins-jenkins-agent'
+            yamlfile 'jenkins-agent.yaml'
+            defaultContainer 'ez-docker-helm-build'
         }
     }
-
     stages {
         stage('Build Docker Image') {
             steps {
