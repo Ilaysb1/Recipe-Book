@@ -2,18 +2,18 @@ pipeline {
     agent {
         kubernetes {
             yaml '''
-            apiVersion: v1
-            kind: Pod
-            metadata:
-            name: jenkins-agent
-            spec:
-            containers:
-            - name: ez-docker-helm-build
-                image: ezezeasy/ez-docker-helm-build:1.41
-                imagePullPolicy: Always
-                securityContext:
-                privileged: true
-            '''
+apiVersion: v1
+kind: Pod
+metadata:
+  name: jenkins-agent
+spec:
+  containers:
+  - name: ez-docker-helm-build
+    image: ezezeasy/ez-docker-helm-build:1.41
+    imagePullPolicy: Always
+    securityContext:
+      privileged: true
+'''
             // label 'jenkins-agent'
             // yaml 'jenkins-agent.yaml'
             // defaultContainer 'ez-docker-helm-build'
@@ -22,13 +22,14 @@ pipeline {
     stages {
         stage('Build Docker Image') {
             steps {
-                container ('ez-docker-helm-build')
+                container('ez-docker-helm-build') {
                     script {
                         // Build Docker image
                         sh 'docker build -t ilaysb/final-project-1-flask_app:latest:${BRANCH_NAME} .'
                     }
+                }
             }
-    }
+        }
         
         stage('Run Unit Test') {
             steps {
