@@ -25,7 +25,7 @@ spec:
                 container('ez-docker-helm-build') {
                     script {
                         // Build Docker image
-                        sh 'docker build -t ilaysb/final-project-1-flask_app:latest:${BRANCH_NAME} .'
+                        sh 'docker build -t ilaysb/final-project-1-flask_app:latest .'
                     }
                 }
             }
