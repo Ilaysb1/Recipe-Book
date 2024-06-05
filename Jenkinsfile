@@ -2,7 +2,7 @@ pipeline {
     agent {
         kubernetes {
             label 'jenkins/jenkins-jenkins-agent'
-            yaml './jenkins-agent.yaml'
+            yaml 'jenkins-agent.yaml'
             defaultContainer 'ez-docker-helm-build'
         }
     }
