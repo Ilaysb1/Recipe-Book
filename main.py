@@ -16,21 +16,20 @@ client = MongoClient(mongo_uri)
 db = client.get_default_database()
 collection = db['recipes']
 
-
 @app.route('/', methods=['GET'])
 def index():
     return render_template('index.html')
-
 
 @app.route('/login', methods=['GET'])
 def login():
     return render_template('login.html')
 
-
-@app.route('/register', methods=['GET'])
+@app.route('/register', methods=['GET', 'POST'])
 def register():
+    if request.method == 'POST':
+        # Process registration data here
+        return redirect(url_for('index'))  # Redirect to the index page after registration
     return render_template('register.html')
-
 
 @app.route('/recipe_entering', methods=['GET', 'POST'])
 def recipe_entering():
@@ -50,7 +49,6 @@ def recipe_entering():
         })
         return redirect(url_for('result', recipe_name=recipe_name))
     return render_template('recipe_entering.html')
-
 
 @app.route('/recipe_book', methods=['GET'])
 def recipe_book():
@@ -73,7 +71,6 @@ def recipe_book():
 
     return render_template('recipe_book.html', recipes=recipes, sort_by=sort_by)
 
-
 @app.route('/result/<recipe_name>', methods=['GET'])
 def result(recipe_name):
     recipe = collection.find_one({'recipe_name': recipe_name})
@@ -83,7 +80,6 @@ def result(recipe_name):
                            recipe_description=recipe['recipe_description'],
                            difficulty=recipe['difficulty'],
                            ingredients=recipe.get('ingredients', ''))
-
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0')

@@ -1,14 +1,14 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: argocd-app
+  name: recipe-book-app4
   namespace: argocd
 spec:
   project: default
   source:
     repoURL: https://github.com/Ilaysb1/Recipe-Book
-    targetRevision: HEAD
-    path: ./proj_helm  # Path within your repo to the helm chart.
+    targetRevision: feature-finalproj-1
+    path: ./proj-helm  # Path within your repo to the helm chart.
     helm:
       parameters:
         - name: image.repository  # Assuming your Helm values use this key
