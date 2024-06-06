@@ -21,6 +21,9 @@ spec:
     }
     stages {
         stage('Build Docker Image') {
+            // when {
+            //     branch 'main'
+            // }
             steps {
                 container('ez-docker-helm-build') {
                     script {
@@ -32,6 +35,11 @@ spec:
         }
         
         stage('Run Unit Test') {
+            // when { 
+            //     not {
+            //         branch 'main'
+            //     }
+            }
             steps {
                 script {
                     // Run unit test (replace with your testing command)

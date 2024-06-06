@@ -6,7 +6,6 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-
 app = Flask(__name__)
 
 mongo_uri = os.environ.get('MONGO_URI')
@@ -17,9 +16,20 @@ client = MongoClient(mongo_uri)
 db = client.get_default_database()
 collection = db['recipes']
 
+
 @app.route('/', methods=['GET'])
 def index():
     return render_template('index.html')
+
+
+@app.route('/login', methods=['GET'])
+def login():
+    return render_template('login.html')
+
+
+@app.route('/register', methods=['GET'])
+def register():
+    return render_template('register.html')
 
 
 @app.route('/recipe_entering', methods=['GET', 'POST'])
@@ -38,12 +48,7 @@ def recipe_entering():
             'difficulty': difficulty,
             'ingredients': ingredients  # Added ingredients to document
         })
-        return redirect(url_for('result',
-                                recipe_name=recipe_name,
-                                recipe_time=recipe_time,
-                                recipe_description=recipe_description,
-                                difficulty=difficulty,
-                                ingredients=ingredients))
+        return redirect(url_for('result', recipe_name=recipe_name))
     return render_template('recipe_entering.html')
 
 
