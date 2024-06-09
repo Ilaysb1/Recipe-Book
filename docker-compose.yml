@@ -16,6 +16,16 @@ services:
       - "27017:27017"
     volumes:
       - mongodb_data:/data/db
+  
+  test:
+    build: 
+      context: .
+      dockerfile: Dockerfile.test
+    environment:
+      MONGO_URI: mongodb+srv://ilaysb:Ilaysb12@cluster0.f1l3dro.mongodb.net/testDB  # Connection URI to MongoDB
+    depends_on:
+      - mongo
+      - flask_app
 
 volumes:
   mongodb_data:

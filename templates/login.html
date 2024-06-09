@@ -8,6 +8,10 @@
     <h2>Login</h2>
     <!-- Add link to go back to index page -->
     <a href="/">Go back to home</a>
+    <!-- Display error message if exists -->
+    {% if error %}
+        <p style="color: red;">{{ error }}</p>
+    {% endif %}
     <!-- Login form -->
     <form action="/login" method="POST">
         <!-- Form fields -->
