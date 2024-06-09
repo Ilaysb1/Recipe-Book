@@ -9,16 +9,16 @@ def client():
     with app.test_client() as client:
         yield client
 
-@pytest.fixture(autouse=True)
+@pytest.fixture(scope="session", autouse=True)
 def mock_db():
     with patch('main.MongoClient', return_value=mongomock.MongoClient()):
-        yield
+        yield mongomock.MongoClient()
 
 def test_index(client):
     response = client.get('/')
     assert b'Welcome to Recipe Management System' in response.data
 
-def test_register(client):
+def test_register(client, cleanup_db):  # Add cleanup_db as parameter
     # Ensure the test user does not already exist
     with patch('main.MongoClient', return_value=mongomock.MongoClient()):
         db = mongomock.MongoClient().db
@@ -32,12 +32,7 @@ def test_register(client):
     # Assert the response contains the error message
     assert b'Username already exists. Please choose a different one.' in response.data
 
-    # Clean up by removing the test user
-    with patch('main.MongoClient', return_value=mongomock.MongoClient()):
-        db = mongomock.MongoClient().db
-        test_user = db.users.find_one({'username': 'testuser'})
-        if test_user:
-            db.users.delete_one({'username': 'testuser'})
+    # No need for cleanup here as it's handled by cleanup_db fixture
             
 def test_login(client):
     response = client.post('/login', data={'username': 'testuser', 'password': 'password123'}, follow_redirects=True)
@@ -64,8 +59,6 @@ def test_recipe_book(client):
     response = client.get('/recipe_book')
     assert b'Recipe Book' in response.data
 
-
-
 def test_result(client):
     response = client.get('/result/Test%20Recipe')
     assert b'Test Recipe' in response.data
@@ -73,3 +66,17 @@ def test_result(client):
 def test_edit_recipe(client):
     response = client.get('/edit/Test%20Recipe')
     assert b'Edit Recipe' in response.data
+
+@pytest.fixture(scope="session", autouse=True)
+def cleanup_db(mock_db):
+    yield  # Execute tests
+    # Clean up by removing the test data
+    mock_db.db.users.delete_many({'username': 'testuser'})
+    # Additional cleanup if needed
+
+def test_delete_entered_recipe(client):
+    # Simulate a request to delete the recipe entered during testing
+    response = client.post('/delete/Test%20Recipe')
+    assert response.status_code == 302  # Check if the redirection happens (status code 302)
+    # You may want to further assert if the recipe has been deleted by checking the database
+

@@ -146,6 +146,11 @@ def edit_recipe(recipe_name):
         return redirect(url_for('result', recipe_name=updated_recipe_name))
     return render_template('edit_recipe.html', title='Edit Recipe', recipe=recipe)
  
+@app.route('/delete/<recipe_name>', methods=['POST'])
+def delete_recipe(recipe_name):
+    recipes_collection.delete_one({'recipe_name': recipe_name})
+    return redirect(url_for('recipe_book'))
+
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0')
  
