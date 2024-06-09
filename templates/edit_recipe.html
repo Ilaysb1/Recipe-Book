@@ -1,0 +1,32 @@
+<html>
+<head>
+    <title>Edit Recipe</title>
+</head>
+<body>
+    <h2>Edit Recipe: {{ recipe.recipe_name }}</h2>
+    <form action="/edit/{{ recipe.recipe_name }}" method="POST">
+        <!-- Form fields for editing recipe details -->
+        <label for="recipe_name">Recipe Name:</label>
+        <input type="text" id="recipe_name" name="recipe_name" value="{{ recipe.recipe_name }}" required><br>
+        
+        <label for="recipe_time">Recipe Time (in minutes):</label>
+        <input type="number" id="recipe_time" name="recipe_time" value="{{ recipe.recipe_time }}" required><br>
+                
+        <label for="recipe_description">Recipe Description:</label><br>
+        <textarea id="recipe_description" name="recipe_description" rows="4" cols="50" required>{{ recipe.recipe_description }}</textarea><br>
+        
+        <label for="difficulty">Difficulty:</label>
+        <select id="difficulty" name="difficulty" required>
+            <option value="easy" {% if recipe.difficulty == 'easy' %} selected {% endif %}>Easy</option>
+            <option value="medium" {% if recipe.difficulty == 'medium' %} selected {% endif %}>Medium</option>
+            <option value="hard" {% if recipe.difficulty == 'hard' %} selected {% endif %}>Hard</option>
+        </select><br>
+        
+        <label for="ingredients">Ingredients:</label><br>
+        <textarea id="ingredients" name="ingredients" rows="4" cols="50" required>{{ recipe.ingredients }}</textarea><br>
+        
+        <button type="submit">Save</button>
+        <a href="{{ url_for('result', recipe_name=recipe.recipe_name) }}">Cancel</a>
+    </form>
+</body>
+</html>

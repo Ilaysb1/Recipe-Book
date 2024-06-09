@@ -1,18 +1,21 @@
+<!-- login.html -->
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Register</title>
+    <title>Login</title>
 </head>
 <body>
-    <h2>Register</h2>
-    <form method="POST" action="/register">
-        <label for="username">Username:</label><br>
-        <input type="text" id="username" name="username"><br><br>
-        <label for="password">Password:</label><br>
-        <input type="password" id="password" name="password"><br><br>
-        <input type="submit" value="Register">
+    <h2>Login</h2>
+    <!-- Add link to go back to index page -->
+    <a href="/">Go back to home</a>
+    <!-- Login form -->
+    <form action="/login" method="POST">
+        <!-- Form fields -->
+        <label for="username">Username:</label>
+        <input type="text" id="username" name="username" required><br>
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" required><br>
+        <input type="submit" value="Login">
     </form>
-    <br>
-    <a href="/login">Login</a>
 </body>
 </html>
