@@ -15,5 +15,6 @@ RUN pip install --no-cache-dir -r requirements.txt
 RUN chmod +x run_tests.sh
 
 # Run the Flask application
-CMD ["./run_tests.sh"]
+# CMD ["./run_tests.sh"]
 
+CMD ["sh", "-c", "python main.py & sleep 5 && python -m pytest test_app.py"]
