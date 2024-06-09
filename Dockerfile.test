@@ -5,13 +5,15 @@ FROM python:3.8-slim
 WORKDIR /app
 
 # Copy the dependencies file to the working directory
-COPY . /app
+COPY test_app.py main.py run_tests.sh ./
+COPY templates/ templates/
+COPY requirements.txt ./
 
 # Install any dependencies
-RUN pip install -r requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
 
-
+RUN chmod +x run_tests.sh
 
 # Run the Flask application
-CMD ["pytest"]
+CMD ["./run_tests.sh"]
 

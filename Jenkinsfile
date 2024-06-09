@@ -16,12 +16,16 @@ spec:
 '''
         }
     }
+    environment {
+        DOCKER_IMAGE = 'ilaysb/final-project-1-flask_app'
+    }
+    
     stages {
         stage('Build Docker Image') {
             steps {
                 container('ez-docker-helm-build') {
                     script {
-                        sh 'docker build -t ilaysb/final-project-1-flask_app:latest .'
+                        sh "docker build -t ${DOCKER_IMAGE}:latest ."
                     }
                 }
             }
@@ -29,8 +33,12 @@ spec:
         
         stage('Run Unit Test') {
             steps {
-                script {
-                    sh 'pytest'
+                container('ez-docker-helm-build') {
+                    script {
+                        // Build and run tests using Dockerfile.test
+                        sh "docker build -t test-image -f Dockerfile.test ."
+                        sh "docker run --rm test-image"
+                    }
                 }
             }
         }
@@ -40,6 +48,23 @@ spec:
                 script {
                     dir('.') {
                         sh 'helm package .'
+                    }
+                }
+            }
+        }
+
+        stage('Push Docker Image') {
+            when {
+                branch 'main'
+            }
+            steps {
+                container('ez-docker-helm-build') {
+                    script {
+                        // Authenticate with Docker Hub using Docker credentials
+                        withCredentials([usernamePassword(credentialsId: 'docker_cred', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
+                            sh "docker login -u ${DOCKER_USERNAME} -p ${DOCKER_PASSWORD}"
+                            sh "docker push ${DOCKER_IMAGE}:latest"
+                        }
                     }
                 }
             }
