@@ -21,7 +21,7 @@ spec:
             steps {
                 container('ez-docker-helm-build') {
                     script {
-                        sh 'docker build -t ilaysb/final-project-1-flask_app:latest:${BRANCH_NAME} .'
+                        sh 'docker build -t ilaysb/final-project-1-flask_app:latest .'
                     }
                 }
             }
