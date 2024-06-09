@@ -5,7 +5,7 @@ FROM python:3.8-slim
 WORKDIR /app
 
 # Copy the dependencies file to the working directory
-COPY test_app.py main.py run_tests.sh ./
+COPY test_app.py main.py run_tests.sh .env ./
 COPY templates/ templates/
 COPY requirements.txt ./
 
