@@ -43,7 +43,7 @@ spec:
             steps {
                 script {
                     // Run unit test (replace with your testing command)
-                    sh '<your_testing_command>'
+                    sh 'pytest'
                 }
             }
         }
