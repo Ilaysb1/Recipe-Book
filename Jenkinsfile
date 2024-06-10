@@ -47,7 +47,7 @@ spec:
             steps {
                 container('ez-docker-helm-build') {
                     script {
-                        dir('.') {
+                        dir('proj-helm') {
                             sh 'helm package .'
                         }
                     }
