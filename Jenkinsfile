@@ -79,7 +79,7 @@ spec:
                         // Your HELM package push step here
                         // Assuming you have a Docker registry set up for HELM charts
                         // Push the HELM package to the Docker registry
-                        sh "helm push proj-helm-0.1.0.tgz docker.io/ilaysb/helm-charts"
+                        sh "helm push proj-helm-0.1.0.tgz docker://docker.io/ilaysb/helm-charts"
                     }
                 }
             }
