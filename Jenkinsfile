@@ -38,7 +38,8 @@ spec:
                 container('ez-docker-helm-build') {
                     script {
                         // Your unit test execution step here
-                        sh "pytest"
+                        sh "docker build -t test-image -f Dockerfile.test ."
+                        sh "docker run --rm test-image"
                     }
                 }
             }
