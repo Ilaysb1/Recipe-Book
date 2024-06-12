@@ -1,6 +1,22 @@
 pipeline {
-    agent any
-    
+    agent {
+        kubernetes {
+            yaml '''
+apiVersion: v1
+kind: Pod
+metadata:
+  name: jenkins-agent
+spec:
+  containers:
+  - name: ez-docker-helm-build
+    image: ezezeasy/ez-docker-helm-build:1.41
+    imagePullPolicy: Always
+    securityContext:
+      privileged: true
+'''
+        }
+    }
+
     environment {
         DOCKER_IMAGE = 'ilaysb/final-project-1-flask_app'
     }
@@ -36,9 +52,6 @@ pipeline {
         }
 
         stage('Docker Push') {
-            when {
-                branch 'main'
-            }
             steps {
                 script {
                     // Your Docker image push step here
@@ -51,9 +64,6 @@ pipeline {
         }
 
         stage('HELM Push') {
-            when{
-                branch 'main'
-            }
             steps {
                 script {
                     // Your HELM package push step here
