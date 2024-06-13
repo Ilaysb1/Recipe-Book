@@ -30,7 +30,7 @@ spec:
                         // Build Docker image and tag it with the build number
                         sh "docker build -t ${DOCKER_IMAGE}:${env.BUILD_NUMBER} ."
                         // Push Docker image to Docker Hub with the build number tag
-                        withDockerRegistry(credentialsId: 'docker_cred') {
+                        withCredentials([usernamePassword(credentialsId: 'docker_cred', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
                             sh "docker login -u ${DOCKER_USERNAME} -p ${DOCKER_PASSWORD}"
                             sh "docker push ${DOCKER_IMAGE}:${env.BUILD_NUMBER}"
                         }
