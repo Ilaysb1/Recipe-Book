@@ -22,12 +22,20 @@ spec:
     }
     
     stages {
-        stage('Build Docker Image') {
+        stage('Build and Push Docker Image') {
             steps {
                 container('ez-docker-helm-build') {
                     script {
-                        // Your Docker image build step here
-                        sh "docker build -t ${DOCKER_IMAGE}:latest ."
+                        // Build Docker image and tag it with the build number
+                        sh "docker build -t ${DOCKER_IMAGE}:${env.BUILD_NUMBER} ."
+                        // Push Docker image to Docker Hub with the build number tag
+                        withDockerRegistry(credentialsId: 'docker_cred') {
+                            sh "docker login -u ${DOCKER_USERNAME} -p ${DOCKER_PASSWORD}"
+                            sh "docker push ${DOCKER_IMAGE}:${env.BUILD_NUMBER}"
+                        }
+                        // Tag the image as 'latest' and push it
+                        sh "docker tag ${DOCKER_IMAGE}:${env.BUILD_NUMBER} ${DOCKER_IMAGE}:latest"
+                        sh "docker push ${DOCKER_IMAGE}:latest"
                     }
                 }
             }
@@ -45,20 +53,27 @@ spec:
             }
         }
 
-        stage('Docker Push') {
-            steps {
-                container('ez-docker-helm-build') {
-                    script {
-                        // Your Docker image push step here
-                        withCredentials([usernamePassword(credentialsId: 'docker_cred', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
-                            sh "docker login -u ${DOCKER_USERNAME} -p ${DOCKER_PASSWORD}"
-                            sh "docker push ${DOCKER_IMAGE}:latest"
-                        }
-                    }
-                }
-            }
-        }
-    }
+    //     stage('Merge Request') {
+    //         when {
+    //             not {
+    //                 branch 'main'
+    //             }
+    //         }
+    //         steps {
+    //             script {
+    //                 withCredentials([usernamePassword(credentialsId: 'github_cred', usernameVariable: 'GITHUB_USER', passwordVariable: 'GITHUB_TOKEN')]) {
+    //                     sh """
+    //                     curl -X POST -u ${GITHUB_USER}:${GITHUB_TOKEN} -d '{
+    //                         "title": "Merge feature to main",
+    //                         "head": "feature-finalproj-1",
+    //                         "base": "main"
+    //                     }' https://api.github.com/repos/ilaysb/Final-Project/pulls
+    //                     """
+    //                 }
+    //             }
+    //         }
+    //     }
+    // }
     
     post {
         success {
@@ -69,6 +84,12 @@ spec:
                     // Example: createPullRequest('main', 'feature-finalproj-1')
                 }
             }
+        }
+        
+        failure {
+            emailext body: 'The build failed. Please check the build logs for details.',
+                     subject: "Build failed: ${env.BUILD_NUMBER}",
+                     to: 'ilay218@gmail.com'
         }
     }
 }
