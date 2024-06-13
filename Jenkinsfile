@@ -17,7 +17,6 @@ spec:
         }
     }
     
-
     environment {
         DOCKER_IMAGE = 'ilaysb/final-project-1-flask_app'
     }
@@ -53,7 +52,7 @@ spec:
         
         stage('Run Unit Test') {
             when {
-                not { 
+                not {
                     branch 'main'
                 }
             }
@@ -96,10 +95,9 @@ spec:
     post {
         success {
             script {
-                if (env.BRANCH_NAME == 'feature-finalproj-1') {
-                    // Create a pull request to the main branch
-                    // Using GitHub API or Jenkins pull request builder plugin
-                    // Example: createPullRequest('main', 'feature-finalproj-1')
+                if (env.BRANCH_NAME == 'main') {
+                    // Add main branch specific actions here
+                    // These actions will be executed after the merge request is approved
                 }
             }
         }
