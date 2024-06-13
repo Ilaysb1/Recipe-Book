@@ -45,19 +45,6 @@ spec:
             }
         }
 
-        stage('Build HELM Package') {
-            steps {
-                container('ez-docker-helm-build') {
-                    script {
-                        // Your HELM package build step here
-                        dir('proj-helm') {
-                            sh 'helm package .'
-                        }
-                    }
-                }
-            }
-        }
-
         stage('Docker Push') {
             steps {
                 container('ez-docker-helm-build') {
@@ -67,19 +54,6 @@ spec:
                             sh "docker login -u ${DOCKER_USERNAME} -p ${DOCKER_PASSWORD}"
                             sh "docker push ${DOCKER_IMAGE}:latest"
                         }
-                    }
-                }
-            }
-        }
-
-        stage('HELM Push') {
-            steps {
-                container('ez-docker-helm-build') {
-                    script {
-                        // Your HELM package push step here
-                        // Assuming you have a Docker registry set up for HELM charts
-                        // Push the HELM package to the Docker registry
-                        sh "helm push proj-helm-0.1.0.tgz docker://docker.io/ilaysb/helm-charts"
                     }
                 }
             }
