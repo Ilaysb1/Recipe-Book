@@ -16,6 +16,7 @@ spec:
 '''
         }
     }
+    
 
     environment {
         DOCKER_IMAGE = 'ilaysb/final-project-1-flask_app'
@@ -53,27 +54,27 @@ spec:
             }
         }
 
-    //     stage('Merge Request') {
-    //         when {
-    //             not {
-    //                 branch 'main'
-    //             }
-    //         }
-    //         steps {
-    //             script {
-    //                 withCredentials([usernamePassword(credentialsId: 'github_cred', usernameVariable: 'GITHUB_USER', passwordVariable: 'GITHUB_TOKEN')]) {
-    //                     sh """
-    //                     curl -X POST -u ${GITHUB_USER}:${GITHUB_TOKEN} -d '{
-    //                         "title": "Merge feature to main",
-    //                         "head": "feature-finalproj-1",
-    //                         "base": "main"
-    //                     }' https://api.github.com/repos/ilaysb/Final-Project/pulls
-    //                     """
-    //                 }
-    //             }
-    //         }
-    //     }
-    // }
+        // stage('Merge Request') {
+        //     when {
+        //         not {
+        //             branch 'main'
+        //         }
+        //     }
+        //     steps {
+        //         script {
+        //             withCredentials([usernamePassword(credentialsId: 'github_cred', usernameVariable: 'GITHUB_USER', passwordVariable: 'GITHUB_TOKEN')]) {
+        //                 sh """
+        //                 curl -X POST -u ${GITHUB_USER}:${GITHUB_TOKEN} -d '{
+        //                     "title": "Merge feature to main",
+        //                     "head": "feature-finalproj-1",
+        //                     "base": "main"
+        //                 }' https://api.github.com/repos/ilaysb/Final-Project/pulls
+        //                 """
+        //             }
+        //         }
+        //     }
+        // }
+    }
     
     post {
         success {
