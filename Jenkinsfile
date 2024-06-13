@@ -23,7 +23,16 @@ spec:
     }
     
     stages {
+        stage('Checkout Code') {
+            steps {
+                checkout scm
+            }
+        }
+        
         stage('Build and Push Docker Image') {
+            when {
+                branch 'main'
+            }
             steps {
                 container('ez-docker-helm-build') {
                     script {
@@ -43,6 +52,11 @@ spec:
         }
         
         stage('Run Unit Test') {
+            when {
+                not { 
+                    branch 'main'
+                }
+            }
             steps {
                 container('ez-docker-helm-build') {
                     script {
