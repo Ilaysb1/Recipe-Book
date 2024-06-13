@@ -28,28 +28,6 @@ spec:
             }
         }
         
-        stage('Build and Push Docker Image') {
-            when {
-                branch 'main'
-            }
-            steps {
-                container('ez-docker-helm-build') {
-                    script {
-                        // Build Docker image and tag it with the build number
-                        sh "docker build -t ${DOCKER_IMAGE}:${env.BUILD_NUMBER} ."
-                        // Push Docker image to Docker Hub with the build number tag
-                        withCredentials([usernamePassword(credentialsId: 'docker_cred', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
-                            sh "docker login -u ${DOCKER_USERNAME} -p ${DOCKER_PASSWORD}"
-                            sh "docker push ${DOCKER_IMAGE}:${env.BUILD_NUMBER}"
-                        }
-                        // Tag the image as 'latest' and push it
-                        sh "docker tag ${DOCKER_IMAGE}:${env.BUILD_NUMBER} ${DOCKER_IMAGE}:latest"
-                        sh "docker push ${DOCKER_IMAGE}:latest"
-                    }
-                }
-            }
-        }
-        
         stage('Run Unit Test') {
             when {
                 not {
@@ -86,6 +64,28 @@ spec:
                             }' \
                             https://api.github.com/repos/Ilaysb1/Recipe-Book/pulls
                         """
+                    }
+                }
+            }
+        }
+        
+        stage('Build and Push Docker Image') {
+            when {
+                branch 'main'
+            }
+            steps {
+                container('ez-docker-helm-build') {
+                    script {
+                        // Build Docker image and tag it with the build number
+                        sh "docker build -t ${DOCKER_IMAGE}:${env.BUILD_NUMBER} ."
+                        // Push Docker image to Docker Hub with the build number tag
+                        withCredentials([usernamePassword(credentialsId: 'docker_cred', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
+                            sh "docker login -u ${DOCKER_USERNAME} -p ${DOCKER_PASSWORD}"
+                            sh "docker push ${DOCKER_IMAGE}:${env.BUILD_NUMBER}"
+                        }
+                        // Tag the image as 'latest' and push it
+                        sh "docker tag ${DOCKER_IMAGE}:${env.BUILD_NUMBER} ${DOCKER_IMAGE}:latest"
+                        sh "docker push ${DOCKER_IMAGE}:latest"
                     }
                 }
             }
