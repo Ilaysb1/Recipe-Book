@@ -88,6 +88,15 @@ spec:
                 }
             }
         }
+        
+                stage('Trigger next update pipline') {
+            when {
+                branch 'main'
+            }
+            steps {
+                build job: 'update', parameters: [string(name: 'DOCKERTAG', value: env.BUILD_NUMBER)]
+            }
+        }
     }
     
     post {
