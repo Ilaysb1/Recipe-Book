@@ -94,7 +94,9 @@ spec:
                 branch 'main'
             }
             steps {
+                container('ez-docker-helm-build') {
                 build job: 'update', parameters: [string(name: 'DOCKERTAG', value: env.BUILD_NUMBER)]
+                }
             }
         }
     }
