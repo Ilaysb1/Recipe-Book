@@ -77,14 +77,12 @@ spec:
                 script {
                     withCredentials([usernamePassword(credentialsId: 'github_cred', usernameVariable: 'GITHUB_USER', passwordVariable: 'GITHUB_PASSWORD')]) {
                         sh """
-                        curl -X POST \
-                            -u ${GITHUB_USER}:${GITHUB_PASSWORD} \
-                            -d '{
+                        curl -X POST -u ${GITHUB_USER}:${GITHUB_PASSWORD} -d '{
                                 "title": "Merge feature to main",
                                 "head": "feature-finalproj-1",
                                 "base": "main"
                             }' \
-                            https://api.github.com/repos/Ilaysb1/Recipe-Book/pulls
+                            'https://api.github.com/repos/Ilaysb1/Recipe-Book/pulls'
                         """
                     }
                 }
