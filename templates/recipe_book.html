@@ -2,42 +2,174 @@
 <html>
 <head>
     <title>Recipe Book</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+    <style>
+        /* General Body Styles */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #2d2d2d;
+            color: #fff; /* Text color */
+            margin: 0;
+            padding: 0;
+            overflow: hidden; /* Prevent scrolling */
+        }
+
+        /* Container for Content */
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #ffffff; /* White background */
+            color: #000000; /* Black text */
+            position: relative; /* Position relative for absolute positioning */
+            z-index: 1; /* Ensure content is above background */
+            border-radius: 5px; /* Rounded corners */
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Subtle box shadow */
+            overflow: hidden; /* Ensure overflow doesn't affect layout */
+        }
+
+        /* Recipe Book Content Styles */
+        .recipe-content {
+            padding: 20px;
+            overflow-y: auto; /* Add vertical scroll if content exceeds container height */
+            max-height: calc(100vh - 200px); /* Limit height to viewport height minus header and footer */
+        }
+
+        /* Form Styles */
+        .recipe-form {
+            margin-bottom: 20px; /* Add space below the form */
+        }
+
+        .recipe-form label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: bold;
+            color: #000000; /* Label text color */
+        }
+
+        .recipe-form select,
+        .recipe-form input[type="submit"] {
+            width: 150px;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-right: 10px;
+            font-size: 1rem;
+            box-sizing: border-box;
+            color: #333; /* Input text color */
+            background-color: #fff; /* Input background color */
+        }
+
+        .recipe-form input[type="submit"] {
+            background-color: #4CAF50; /* Green */
+            color: white;
+            border: none;
+            cursor: pointer;
+            text-decoration: none;
+            padding: 10px 20px;
+            display: inline-block;
+            border-radius: 5px;
+            font-size: 1rem;
+            margin-top: 10px;
+        }
+
+        .recipe-form input[type="submit"]:hover {
+            background-color: #45a049; /* Darker green on hover */
+        }
+
+        /* Recipe List Styles */
+        .recipe-list {
+            list-style-type: none;
+            padding: 0;
+            margin-top: 20px;
+        }
+
+        .recipe-list li {
+            margin-bottom: 10px;
+            color: #000000; /* Recipe list text color */
+        }
+
+        .recipe-list li a {
+            color: #000000;
+            text-decoration: none;
+            font-size: 1rem;
+        }
+
+        .recipe-list li a:hover {
+            text-decoration: underline;
+        }
+
+        /* Go to Dashboard Link */
+        .go-to-dashboard {
+            display: inline-block;
+            background-color: #4CAF50; /* Green */
+            color: white;
+            border: none;
+            cursor: pointer;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-size: 1rem;
+            float: right; /* Align to the right */
+            margin-top: 10px;
+        }
+
+        .go-to-dashboard:hover {
+            background-color: #45a049; /* Darker green on hover */
+        }
+    </style>
 </head>
 <body>
-    <h2>Recipe Book</h2>
-    <form action="/recipe_book" method="GET">
-        <label for="sort_by">Sort by:</label>
-        <select id="sort_by" name="sort_by">
-            <option value="none" {% if sort_by == 'none' %}selected{% endif %}>None</option>
-            <option value="time" {% if sort_by == 'time' %}selected{% endif %}>Time</option>
-            <option value="difficulty" {% if sort_by == 'difficulty' %}selected{% endif %}>Difficulty</option>
-        </select>
-        <label for="sort_order">Sort order:</label>
-        <select id="sort_order" name="sort_order">
-            <option value="asc" {% if sort_order == 'asc' %}selected{% endif %}>Ascending</option>
-            <option value="desc" {% if sort_order == 'desc' %}selected{% endif %}>Descending</option>
-        </select>
-        <input type="submit" value="Sort">
-    </form>
-    {% if sort_by != 'none' %}
-    <ul>
-        {% for recipe in recipes %}
-            <li><a href="{{ url_for('result', recipe_name=recipe.recipe_name) }}">{{ recipe.recipe_name }}</a> - 
-                {% if sort_by == 'time' %}
-                    Time: {{ recipe.recipe_time }} minutes
-                {% elif sort_by == 'difficulty' %}
-                    Difficulty: {{ recipe.difficulty }}
-                {% endif %}
-            </li>
-        {% endfor %}
-    </ul>
-    {% else %}
-    <ul>
-        {% for recipe in recipes %}
-            <li><a href="{{ url_for('result', recipe_name=recipe.recipe_name) }}">{{ recipe.recipe_name }}</a></li>
-        {% endfor %}
-    </ul>
-    {% endif %}
-    <a href="/dashboard">Go to Dashboard</a> <!-- Add this line for linking to the dashboard -->
+    <!-- Background Image -->
+    <div class="recipe-background"></div>
+
+    <!-- Container for Content -->
+    <div class="container">
+        <!-- Recipe Book Content -->
+        <div class="recipe-content">
+            <h2>Recipe Book</h2>
+            <form class="recipe-form" action="/recipe_book" method="GET">
+                <label for="sort_by">Sort by:</label>
+                <select id="sort_by" name="sort_by">
+                    <option value="none" {% if sort_by == 'none' %}selected{% endif %}>None</option>
+                    <option value="time" {% if sort_by == 'time' %}selected{% endif %}>Time</option>
+                    <option value="difficulty" {% if sort_by == 'difficulty' %}selected{% endif %}>Difficulty</option>
+                </select>
+
+                <label for="sort_order">Sort order:</label>
+                <select id="sort_order" name="sort_order">
+                    <option value="asc" {% if sort_order == 'asc' %}selected{% endif %}>Ascending</option>
+                    <option value="desc" {% if sort_order == 'desc' %}selected{% endif %}>Descending</option>
+                </select>
+
+                <input type="submit" value="Sort">
+            </form>
+
+            {% if sort_by != 'none' %}
+                <ul class="recipe-list">
+                    {% for recipe in recipes %}
+                        <li>
+                            <a href="{{ url_for('result', recipe_name=recipe.recipe_name) }}">
+                                {{ recipe.recipe_name }}
+                            </a> - 
+                            {% if sort_by == 'time' %}
+                                Time: {{ recipe.recipe_time }} minutes
+                            {% elif sort_by == 'difficulty' %}
+                                Difficulty: {{ recipe.difficulty }}
+                            {% endif %}
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <ul class="recipe-list">
+                    {% for recipe in recipes %}
+                        <li><a href="{{ url_for('result', recipe_name=recipe.recipe_name) }}">{{ recipe.recipe_name }}</a></li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+
+            <a class="go-to-dashboard" href="/dashboard">Go to Dashboard</a>
+        </div>
+    </div>
 </body>
 </html>
