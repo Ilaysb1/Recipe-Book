@@ -9,7 +9,10 @@ services:
       - mongo
     environment:
       MONGO_URI: mongodb+srv://ilaysb:Ilaysb12@cluster0.f1l3dro.mongodb.net/testDB  # Connection URI to MongoDB
-
+    volumes:
+      - ./main.py:/app/main.py   # Mount the main.py file
+      - ./static:/app/static     # Mount the static directory
+      
   mongo:
     image: mongo
     ports:
