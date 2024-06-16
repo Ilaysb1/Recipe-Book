@@ -5,8 +5,8 @@ pipeline {
             idleMinutes 5
             yamlFile 'build-pod.yaml'
             defaultContainer 'ez-docker-helm-build'
-            }
         }
+    }
 
     
     environment {
