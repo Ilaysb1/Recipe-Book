@@ -19,6 +19,9 @@ spec:
     
     environment {
         DOCKER_IMAGE = 'ilaysb/final-project-1-flask_app'
+        GITHUB_REPO = 'Ilaysb1/Recipe-Book'
+        GITHUB_API_URL = 'https://api.github.com'
+        GITHUB_TOKEN = credentials('github_token')
     }
     
     stages {
@@ -27,28 +30,30 @@ spec:
                 checkout scm
             }
         }
-        
-        stage('Build and Push Docker Image') {
-            when {
-                branch 'main'
-            }
-            steps {
-                container('ez-docker-helm-build') {
-                    script {
-                        // Build Docker image and tag it with the build number
-                        sh "docker build -t ${DOCKER_IMAGE}:${env.BUILD_NUMBER} ."
-                        // Push Docker image to Docker Hub with the build number tag
-                        withCredentials([usernamePassword(credentialsId: 'docker_cred', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
-                            sh "docker login -u ${DOCKER_USERNAME} -p ${DOCKER_PASSWORD}"
-                            sh "docker push ${DOCKER_IMAGE}:${env.BUILD_NUMBER}"
+
+        stage("Build docker image"){
+                    steps {
+                        script {
+                            dockerImage = docker.build("${DOCKER_IMAGE}:latest", "--no-cache .")
+                            dockerImage2 = docker.build("${DOCKER_IMAGE}:${env.BUILD_NUMBER}", "--no-cache .")
+
                         }
-                        // Tag the image as 'latest' and push it
-                        sh "docker tag ${DOCKER_IMAGE}:${env.BUILD_NUMBER} ${DOCKER_IMAGE}:latest"
-                        sh "docker push ${DOCKER_IMAGE}:latest"
                     }
                 }
-            }
-        }
+
+        stage('Push Docker image') {
+                    when {
+                        branch 'main'
+                    }
+                    steps {
+                        script {
+                            docker.withRegistry('https://registry.hub.docker.com', 'docker_cred') {
+                                dockerImage.push("latest")
+                                dockerImage2.push("${BUILD_NUMBER}")
+                            }
+                        }
+                    }
+                }
         
         stage('Run Unit Test') {
             when {
@@ -74,39 +79,18 @@ spec:
                 }
             }
             steps {
-                script {
-                    withCredentials([usernamePassword(credentialsId: 'github_cred', usernameVariable: 'GITHUB_USER', passwordVariable: 'GITHUB_PASSWORD')]) {
+                withCredentials([string(credentialsId: 'github_token', variable: 'GITHUB_TOKEN')]) {
+                    script {
+                        def branchName = env.BRANCH_NAME
+                        def pullRequestTitle = "Merge ${branchName} into main"
+                        def pullRequestBody = "Automatically generated merge request for branch ${branchName}"
+
                         sh """
-                        curl -X POST -u ${GITHUB_USER}:${GITHUB_PASSWORD} -d '{
-                                "title": "Merge feature to main",
-                                "head": "feature-finalproj-1",
-                                "base": "main"
-                            }' \
-                            'https://api.github.com/repos/Ilaysb1/Recipe-Book/pulls'
+                            curl -X POST -H "Authorization: token ${GITHUB_TOKEN}" \
+                            -d '{ "title": "${pullRequestTitle}", "body": "${pullRequestBody}", "head": "${branchName}", "base": "main" }' \
+                            ${GITHUB_API_URL}/repos/${GITHUB_REPO}/pulls
                         """
                     }
-                }
-            }
-        }
-        
-                stage('Trigger next update pipline') {
-            when {
-                branch 'main'
-            }
-            steps {
-                container('ez-docker-helm-build') {
-                build job: 'update', parameters: [string(name: 'DOCKERTAG', value: env.BUILD_NUMBER)]
-                }
-            }
-        }
-    }
-    
-    post {
-        success {
-            script {
-                if (env.BRANCH_NAME == 'main') {
-                    // Add main branch specific actions here
-                    // These actions will be executed after the merge request is approved
                 }
             }
         }
