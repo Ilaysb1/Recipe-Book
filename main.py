@@ -7,6 +7,8 @@ load_dotenv()
  
 app = Flask(__name__)
 app.secret_key = os.environ.get('SECRET_KEY')
+
+app.static_folder = 'static'
  
 mongo_uri = os.environ.get('MONGO_URI')
 if not mongo_uri:
@@ -127,12 +129,14 @@ def dashboard():
 @app.route('/edit/<recipe_name>', methods=['GET', 'POST'])
 def edit_recipe(recipe_name):
     recipe = recipes_collection.find_one({'recipe_name': recipe_name})
+    
     if request.method == 'POST':
         updated_recipe_name = request.form['recipe_name']
-        updated_recipe_time = request.form['recipe_time']
+        updated_recipe_time = int(request.form['recipe_time'])  # Convert to integer
         updated_recipe_description = request.form['recipe_description']
         updated_difficulty = request.form['difficulty']
         updated_ingredients = request.form['ingredients']
+        
         recipes_collection.update_one(
             {'recipe_name': recipe_name},
             {'$set': {
@@ -143,7 +147,9 @@ def edit_recipe(recipe_name):
                 'ingredients': updated_ingredients
             }}
         )
+        
         return redirect(url_for('result', recipe_name=updated_recipe_name))
+    
     return render_template('edit_recipe.html', title='Edit Recipe', recipe=recipe)
  
 @app.route('/delete/<recipe_name>', methods=['POST'])

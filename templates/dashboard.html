@@ -2,14 +2,19 @@
 <html>
 <head>
     <title>Dashboard</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
-    <h2>Welcome to the Dashboard, {{ username }}</h2>
-    <ul>
-        <li><a href="/recipe_entering">Enter Recipe</a></li>
-        <li><a href="/recipe_book">Recipe Book</a></li>
-        <!-- Add other links or content for the dashboard as needed -->
-        <li><a href="/logout">Logout</a></li> <!-- Add logout link -->
-    </ul>
+    <div class="recipe-background">
+        <h1>Welcome to the Dashboard, {{ username }}</h1>
+        <div class="container">
+            <ul class="index-options">
+                <li><a href="/recipe_entering">Enter Recipe</a></li>
+                <li><a href="/recipe_book">Recipe Book</a></li>
+                <!-- Add other links or content for the dashboard as needed -->
+                <li><a href="/logout">Logout</a></li> <!-- Add logout link -->
+            </ul>
+        </div>
+    </div>
 </body>
 </html>

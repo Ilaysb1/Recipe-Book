@@ -2,21 +2,114 @@
 <html>
 <head>
     <title>{{ recipe_name }}</title>
+    <style>
+        /* General Body Styles */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #2d2d2d;
+            color: #ffffff; /* Text color */
+            margin: 0;
+            padding: 0;
+            overflow: hidden; /* Prevent scrolling */
+        }
+
+        /* Background Image Styles */
+        .background-image {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background-image: url('../static/recipe-book-index.jpg');
+            background-size: cover;
+            background-position: center;
+        }
+
+        /* Container for Content */
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #ffffff; /* White background */
+            color: #000000; /* Black text */
+            position: relative; /* Position relative for absolute positioning */
+            z-index: 1; /* Ensure content is above background */
+            border-radius: 5px; /* Rounded corners */
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Subtle box shadow */
+            overflow: hidden; /* Ensure overflow doesn't affect layout */
+        }
+
+        /* Recipe Detail Content Styles */
+        .recipe-detail {
+            padding: 20px;
+        }
+
+        .recipe-detail h2 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .recipe-detail p {
+            margin-bottom: 10px;
+        }
+
+        .recipe-detail ul {
+            list-style-type: none;
+            padding: 0;
+            margin-top: 10px;
+        }
+
+        .recipe-detail ul li {
+            margin-bottom: 5px;
+        }
+
+        /* Edit and Go Back Links */
+        .edit-link,
+        .go-back-link {
+            display: inline-block;
+            background-color: #4CAF50; /* Green */
+            color: white;
+            border: none;
+            cursor: pointer;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-size: 1rem;
+            margin-top: 10px;
+        }
+
+        .edit-link:hover,
+        .go-back-link:hover {
+            background-color: #45a049; /* Darker green on hover */
+        }
+
+        .go-back-link {
+            margin-left: 10px; /* Add space between links */
+        }
+    </style>
 </head>
 <body>
-    <h2>{{ recipe_name }}</h2>
-    <p>Time: {{ formatted_time }}</p>
-    <p>Description: {{ recipe_description }}</p>
-    <p>Difficulty: {{ difficulty }}</p>
-    <p>Ingredients:</p>
-    <ul>
-        {% for ingredient in ingredients.split('\n') %}
-            <li>{{ ingredient }}</li>
-        {% endfor %}
-    </ul>
-    <br>
-    <a href="/edit/{{ recipe_name }}">Edit Recipe</a>
-    <br>
-    <a href="/recipe_book">Go back to recipe book</a>
+    <!-- Background Image -->
+    <div class="background-image"></div>
+
+    <!-- Content Container -->
+    <div class="container">
+        <div class="recipe-detail">
+            <h2>{{ recipe_name }}</h2>
+            <p>Time: {{ formatted_time }}</p>
+            <p>Description: {{ recipe_description }}</p>
+            <p>Difficulty: {{ difficulty }}</p>
+            <p>Ingredients:</p>
+            <ul>
+                {% for ingredient in ingredients.split('\n') %}
+                    <li>{{ ingredient }}</li>
+                {% endfor %}
+            </ul>
+            <br>
+            <a class="edit-link" href="/edit/{{ recipe_name }}">Edit Recipe</a>
+            <a class="go-back-link" href="/recipe_book">Go back to recipe book</a>
+        </div>
+    </div>
 </body>
 </html>
