@@ -150,8 +150,8 @@ def edit_recipe(recipe_name):
         
         return redirect(url_for('result', recipe_name=updated_recipe_name))
     
-    return render_template('edit_recipe.html', title='Edit Recipe', recipe=recipe)
- 
+    return render_template('edit_recipe.html', recipe=recipe)
+
 @app.route('/delete/<recipe_name>', methods=['POST'])
 def delete_recipe(recipe_name):
     recipes_collection.delete_one({'recipe_name': recipe_name})
