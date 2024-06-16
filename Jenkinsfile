@@ -1,21 +1,13 @@
 pipeline {
     agent {
-        kubernetes {
-            yaml '''
-apiVersion: v1
-kind: Pod
-metadata:
-  name: jenkins-agent
-spec:
-  containers:
-  - name: ez-docker-helm-build
-    image: ezezeasy/ez-docker-helm-build:1.41
-    imagePullPolicy: Always
-    securityContext:
-      privileged: true
-'''
+        kubernetes{
+            label "recipes-project-agent"
+            idleMinutes 5
+            yamlFile 'build-pod.yaml'
+            defaultContainer 'ez-docker-helm-build'
+            }
         }
-    }
+
     
     environment {
         DOCKER_IMAGE = 'ilaysb/final-project-1-flask_app'
