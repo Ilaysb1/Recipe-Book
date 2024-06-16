@@ -158,5 +158,5 @@ def delete_recipe(recipe_name):
     return redirect(url_for('recipe_book'))
 
 if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0')
+    app.run(debug=True, host='0.0.0.0', port = 5000)
  
