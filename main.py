@@ -9,7 +9,7 @@ app = Flask(__name__)
 app.secret_key = os.environ.get('SECRET_KEY')
 
 app.static_folder = 'static'
- 
+
 mongo_uri = os.environ.get('MONGO_URI')
 if not mongo_uri:
     raise ValueError("MONGO_URI environment variable is not set")
@@ -159,3 +159,4 @@ def delete_recipe(recipe_name):
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port = 5000)
+    
