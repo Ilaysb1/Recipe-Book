@@ -27,3 +27,4 @@ additionalPrometheusRulesMap:
             annotations:
               summary: "High memory usage"
               description: "Memory usage in pods matching 'recipe-book-app5*' in namespace 'dev' is above 80% of the allocated limit."
+
