@@ -1,4 +1,3 @@
-![צילום מסך 2024-06-23 234126](https://github.com/Ilaysb1/Recipe-Book/assets/144901363/99c51f13-f7c2-4999-b370-984720b557eb)
 # Recipe Book Project
 
 Welcome to my Recipe Book Website, where you can Register, Enter Recipes, Sort for them, And change them is you made a mistake.
