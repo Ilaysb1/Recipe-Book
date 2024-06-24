@@ -94,3 +94,54 @@ process. in this project used with multibranch pipeline t orun diffrent workflow
 
 ![prometheus](https://github.com/Ilaysb1/Recipe-Book/assets/144901363/6133432b-fb0a-4211-95fb-34a0acfd4292)
 
+***
+# Run localy
+
+## Clone
+```
+git clone https://github.com/Ilaysb1/Recipe-Book.git
+```
+## Docker compose file :
+
+```
+version: '3'
+
+services:
+  flask_app:
+    build: .
+    ports:
+      - "5000:5000"
+    depends_on:
+      - mongo
+    environment:
+      MONGO_URI: mongodb+srv://ilaysb:Ilaysb12@cluster0.f1l3dro.mongodb.net/testDB  
+    volumes:
+      - ./main.py:/app/main.py 
+      - ./static:/app/static   
+      
+  mongo:
+    image: mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+  
+  test:
+    build: 
+      context: .
+      dockerfile: Dockerfile.test
+    environment:
+      MONGO_URI: mongodb+srv://ilaysb:Ilaysb12@cluster0.f1l3dro.mongodb.net/testDB  
+    depends_on:
+      - mongo
+      - flask_app
+
+volumes:
+  mongodb_data:
+```
+
+## Start the Application
+```
+ docker-compose up -d
+```
+
