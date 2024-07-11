@@ -1,6 +1,6 @@
 # Recipe Book Project
 
-Welcome to my Recipe Book Website, where you can Register, Enter Recipes, Sort for them, And change them is you made a mistake.
+Welcome to my Recipe Book Website, where you can Register, Enter Recipes, Sort for them, And change them if you made a mistake.
 ***
 ## Features 
 
